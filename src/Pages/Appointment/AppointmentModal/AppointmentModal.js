@@ -1,10 +1,14 @@
 import { format } from 'date-fns';
-import React from 'react';
+import React, { useContext } from 'react';
+import { toast } from 'react-hot-toast';
+import { json } from 'react-router-dom';
+import { AuthContext } from '../../../Context/Context';
 
-const AppointmentModal = ({ treatment, setTreatment, selectedDate }) => {
+const AppointmentModal = ({ treatment, setTreatment, refetch, selectedDate }) => {
 
     const { title, slots } = treatment;
     const formatDate = format(selectedDate, 'PP');
+    const { user } = useContext(AuthContext)
 
     const hendelSubmit = event => {
         event.preventDefault();
@@ -21,8 +25,26 @@ const AppointmentModal = ({ treatment, setTreatment, selectedDate }) => {
             email,
             phone
         };
-        console.log(booking)
-        setTreatment(null)
+
+        fetch(`http://localhost:5000/bookingTreatment`, {
+            method: "POST",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify(booking),
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data)
+                if (data.acknowledged) {
+                    setTreatment(null);
+                    refetch()
+                    toast.success('Your Booking is Successfull !!!!!!!!!!!');
+                }
+                else{
+                    toast.error(data.message)
+                }
+            })
     }
 
     return (
@@ -40,7 +62,7 @@ const AppointmentModal = ({ treatment, setTreatment, selectedDate }) => {
                             }
                         </select>
                         <input type="text" name='name' placeholder="your name" className="input input-bordered w-full mt-3" required />
-                        <input type="email" name='email' placeholder="your email" className="input input-bordered w-full mt-3" required />
+                        <input type="email" name='email' disabled defaultValue={user?.email} placeholder="your email" className="input input-bordered w-full mt-3" required />
                         <input type="phone" name='phone' placeholder="your phone" className="input input-bordered w-full mt-3" required /><br />
                         <button type="submit" className='btn mt-2 w-full'>SUBMIT</button>
                     </form>
