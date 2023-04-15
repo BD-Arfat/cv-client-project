@@ -6,7 +6,7 @@ import { AuthContext } from '../../../Context/Context';
 
 const AppointmentModal = ({ treatment, setTreatment, refetch, selectedDate }) => {
 
-    const { title, slots } = treatment;
+    const { title, slots, price } = treatment;
     const formatDate = format(selectedDate, 'PP');
     const { user } = useContext(AuthContext)
 
@@ -23,7 +23,8 @@ const AppointmentModal = ({ treatment, setTreatment, refetch, selectedDate }) =>
             name,
             slot,
             email,
-            phone
+            phone,
+            price
         };
 
         fetch(`http://localhost:5000/bookingTreatment`, {

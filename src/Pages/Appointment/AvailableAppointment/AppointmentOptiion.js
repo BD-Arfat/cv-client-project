@@ -1,7 +1,7 @@
 import React from 'react';
 
 const AppointmentOptiion = ({appointmentOptiion, setTreatment}) => {
-    const { title, slots } = appointmentOptiion
+    const { title, slots, price } = appointmentOptiion
 
     return (
         <div className="card gap-2 w-11/12 ms-8 md:ms-0 mx-auto bg-base-100 shadow-2xl mt-6">
@@ -9,6 +9,7 @@ const AppointmentOptiion = ({appointmentOptiion, setTreatment}) => {
                 <h2 className="card-title text-info font-bold">{title}</h2>
                 <p>{slots.length > 0 ? slots[0] : "Try Another Day"}</p>
                 <p>{slots.length} {slots.length > 1 ? "spaces" : "space"} Available</p>
+                <p>Price : ${price}</p>
                 <div className="card-actions">
                     <label
                         disabled = {slots.length === 0}
